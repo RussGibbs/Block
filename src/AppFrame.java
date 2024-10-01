@@ -29,7 +29,7 @@ public class AppFrame extends JFrame implements ActionListener {
         jPanel.add(controlPanel);
 
         gravityTextField = new JTextField();
-        gravityTextField.setText("-0.2");
+        gravityTextField.setText("-0.05");
         controlPanel.add(gravityTextField);
 
         gravityButton = new JButton("Set");
@@ -42,7 +42,7 @@ public class AppFrame extends JFrame implements ActionListener {
         simPanel.setVisible(true);
         simPanel.setBackground(new Color(100, 100, 100));
         simPanel.setLayout(new FlowLayout());
-        simPanel.setSize(1000, 1000);
+        simPanel.setSize(800, 1000);
         jPanel.add(simPanel);
 
 

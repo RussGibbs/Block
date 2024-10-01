@@ -46,9 +46,9 @@ public class Block extends JComponent{
         initialSpeedY = 0;
 
         initialRandomness = 10;
-        springyness = 0.5;
+        springyness = 0.2;
         //gravity = - 0.5;
-        damping = 0.001;
+        damping = 0.01;
         collisionRestitution = 0.9;
         frictionRestitution = 0.9;
 
@@ -66,8 +66,8 @@ public class Block extends JComponent{
 
         // this commented out stuff was to rotate it
 
-        /*
-        for (int i = 0; i < 10; i++) {
+
+        /*for (int i = 0; i < 10; i++) {
             vertices[i][0].setSpeedX(500);
             vertices[i][9].setSpeedX(-500);
             vertices[0][i].setSpeedY(500);
@@ -105,43 +105,104 @@ public class Block extends JComponent{
                 v.setY(v.getY() - v.getSpeedY() * dt);
 
                 // applies the force to set the speed plus gravity
-                v.setSpeedY(v.getSpeedY() + v.getForceY() * springyness);
-                v.setSpeedX(v.getSpeedX() + v.getForceX() * springyness);
+                v.setSpeedY(v.getSpeedY() + v.getForceY());
+                v.setSpeedX(v.getSpeedX() + v.getForceX());
 
 
                 // all of this essentially applies damping
                 if (i != 0) {
+                    double d = 0.1;
                     v2 = vertices[i - 1][j];
-                    v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()));
-                    v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY()));
+                    v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()) *
+                            Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                    Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                    v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                    Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                            v2.getSpeedY() * 0.1), 2))));
+                    v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY())*
+                            Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                    Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                    v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                    Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                            v2.getSpeedY() * 0.1), 2))));
                     if (j != 0) {
                         v2 = vertices[i - 1][j - 1];
-                        v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()));
-                        v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY()));
+                        v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()) *
+                                Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                        Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                        v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                        Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                                v2.getSpeedY() * 0.1), 2))));
+                        v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY())*
+                                Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                        Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                        v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                        Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                                v2.getSpeedY() * 0.1), 2))));
                     }
                 }
 
                 if (i != dimensions - 1) {
                     v2 = vertices[i + 1][j];
-                    v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()));
-                    v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY()));
+                    v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()) *
+                            Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                    Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                    v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                    Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                            v2.getSpeedY() * 0.1), 2))));
+                    v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY())*
+                            Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                    Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                    v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                    Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                            v2.getSpeedY() * 0.1), 2))));
                     if (j != dimensions - 1) {
                         v2 = vertices[i + 1][j + 1];
-                        v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()));
-                        v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY()));
+                        v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()) *
+                                Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                        Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                        v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                        Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                                v2.getSpeedY() * 0.1), 2))));
+                        v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY())*
+                                Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                        Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                        v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                        Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                                v2.getSpeedY() * 0.1), 2))));
                     }
                 }
 
                 if (j != 0) {
                     v2 = vertices[i][j - 1];
-                    v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()));
-                    v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY()));
+                    v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()) *
+                            Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                    Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                    v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                    Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                            v2.getSpeedY() * 0.1), 2))));
+                    v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY())*
+                            Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                    Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                    v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                    Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                            v2.getSpeedY() * 0.1), 2))));
                 }
 
                 if (j != dimensions - 1) {
                     v2 = vertices[i][j + 1];
-                    v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()));
-                    v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY()));
+                    v.setSpeedX(v.getSpeedX() - damping * (v.getSpeedX() - v2.getSpeedX()) *
+                            Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                    Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                    v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                    Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                            v2.getSpeedY() * 0.1), 2))));
+                    v.setSpeedY(v.getSpeedY() - damping * (v.getSpeedY() - v2.getSpeedY())*
+                            Math.abs(Math.sqrt(Math.pow(v.getX() - v2.getX(), 2) +
+                                    Math.pow(v.getY() - v2.getY(), 2)) - Math.sqrt(Math.pow((v.getX() +
+                                    v.getSpeedX() * 0.1) - (v2.getX() + v2.getSpeedX() * 0.1), 2) +
+                                    Math.pow((v.getY() + v.getSpeedY() * 0.1) - (v2.getY() +
+                                            v2.getSpeedY() * 0.1), 2))));
                 }
 
 
@@ -192,8 +253,8 @@ public class Block extends JComponent{
                             sign = -1;
                         }
                         netForce = equilibriumSeperation * Math.sqrt(2) - Math.sqrt(Math.pow(v.getY() - v2.getY(), 2) + Math.pow(v.getX() - v2.getX(), 2));
-                        v.setForceX(v.getForceX() + sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
-                        v.setForceY(v.getForceY() - sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
+                        v.setForceX(v.getForceX() + (sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
+                        v.setForceY(v.getForceY() - (sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
                     }
                     if (j != dimensions - 1) {
                         v2 = vertices[i - 1][j + 1];
@@ -202,8 +263,8 @@ public class Block extends JComponent{
                             sign = -1;
                         }
                         netForce = equilibriumSeperation * Math.sqrt(2) - Math.sqrt(Math.pow(v.getY() - v2.getY(), 2) + Math.pow(v.getX() - v2.getX(), 2));
-                        v.setForceX(v.getForceX() + sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
-                        v.setForceY(v.getForceY() - sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
+                        v.setForceX(v.getForceX() + (sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
+                        v.setForceY(v.getForceY() - (sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
                     }
                     v2 = vertices[i - 1][j];
                     sign = 1;
@@ -211,8 +272,8 @@ public class Block extends JComponent{
                         sign = -1;
                     }
                     netForce = equilibriumSeperation - Math.sqrt(Math.pow(v.getY() - v2.getY(), 2) + Math.pow(v.getX() - v2.getX(), 2));
-                    v.setForceX(v.getForceX() + sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
-                    v.setForceY(v.getForceY() - sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
+                    v.setForceX(v.getForceX() + (sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
+                    v.setForceY(v.getForceY() - (sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
                 }
 
                 if (j != 0) {
@@ -222,8 +283,8 @@ public class Block extends JComponent{
                         sign = -1;
                     }
                     netForce = equilibriumSeperation - Math.sqrt(Math.pow(v.getY() - v2.getY(), 2) + Math.pow(v.getX() - v2.getX(), 2));
-                    v.setForceX(v.getForceX() + sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
-                    v.setForceY(v.getForceY() - sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
+                    v.setForceX(v.getForceX() + (sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
+                    v.setForceY(v.getForceY() - (sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
                 }
 
                 if (i != dimensions - 1) {
@@ -234,8 +295,8 @@ public class Block extends JComponent{
                             sign = -1;
                         }
                         netForce = equilibriumSeperation * Math.sqrt(2) - Math.sqrt(Math.pow(v.getY() - v2.getY(), 2) + Math.pow(v.getX() - v2.getX(), 2));
-                        v.setForceX(v.getForceX() + sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
-                        v.setForceY(v.getForceY() - sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
+                        v.setForceX(v.getForceX() + (sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
+                        v.setForceY(v.getForceY() - (sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
                     }
                     if (j != dimensions - 1) {
                         v2 = vertices[i + 1][j + 1];
@@ -244,8 +305,8 @@ public class Block extends JComponent{
                             sign = -1;
                         }
                         netForce = equilibriumSeperation * Math.sqrt(2) - Math.sqrt(Math.pow(v.getY() - v2.getY(), 2) + Math.pow(v.getX() - v2.getX(), 2));
-                        v.setForceX(v.getForceX() + sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
-                        v.setForceY(v.getForceY() - sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
+                        v.setForceX(v.getForceX() + (sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
+                        v.setForceY(v.getForceY() - (sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
                     }
                     v2 = vertices[i + 1][j];
                     sign = 1;
@@ -253,8 +314,8 @@ public class Block extends JComponent{
                         sign = -1;
                     }
                     netForce = equilibriumSeperation - Math.sqrt(Math.pow(v.getY() - v2.getY(), 2) + Math.pow(v.getX() - v2.getX(), 2));
-                    v.setForceX(v.getForceX() + sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
-                    v.setForceY(v.getForceY() - sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
+                    v.setForceX(v.getForceX() + (sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
+                    v.setForceY(v.getForceY() - (sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
                 }
 
                 if (j != dimensions - 1) {
@@ -264,8 +325,8 @@ public class Block extends JComponent{
                         sign = -1;
                     }
                     netForce = equilibriumSeperation - Math.sqrt(Math.pow(v.getY() - v2.getY(), 2) + Math.pow(v.getX() - v2.getX(), 2));
-                    v.setForceX(v.getForceX() + sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
-                    v.setForceY(v.getForceY() - sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX()))));
+                    v.setForceX(v.getForceX() + (sign * netForce * Math.cos(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
+                    v.setForceY(v.getForceY() - (sign * netForce * Math.sin(Math.atan((v.getY() - v2.getY()) / (v.getX() - v2.getX())))) * springyness);
                 }
 
                 v.setForceY(v.getForceY() + gravity);
