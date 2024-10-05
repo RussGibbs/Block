@@ -24,11 +24,29 @@ public class CollisionBlock {
     }
 
     public void setX(double x) {
-        this.x = x;
+        if (x < 0) {
+            this.x = 0;
+        }
+        else if (x > 790 - width){
+            this.x = 790 - width;
+        }
+        else {
+            this.x = x;
+        }
+
     }
 
     public void setY(double y) {
-        this.y = y;
+        if (y < 0) {
+            this.y = 0;
+        }
+        else if (y > 990 - height){
+            this.y = 990 - height;
+        }
+        else {
+            this.y = y;
+        }
+
     }
 
     public double getX() {

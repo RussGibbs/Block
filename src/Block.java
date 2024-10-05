@@ -87,6 +87,7 @@ public class Block extends JComponent{
         for (int i = 0; i < dimensions; i++) {
             for (int j = 0; j < dimensions; j++) {
                 g.fillOval((int) vertices[i][j].getX(), (int) vertices[i][j].getY(), 10, 10);
+                g.fillRect((int) collisionBlock.getX(), (int) (collisionBlock.getY()), collisionBlock.getWidth(), collisionBlock.getHeight());
             }
         }
     }
@@ -98,9 +99,52 @@ public class Block extends JComponent{
                 Vertex v = this.vertices[i][j];
                 Vertex v2;
 
-                // applies the speed to set the position
-                v.setX(v.getX() + v.getSpeedX() * dt);
-                v.setY(v.getY() - v.getSpeedY() * dt);
+                // applies the speed to set the position with collisions
+                if (v.getY() < collisionBlock.getY() - 5 &&
+                        v.getY() - v.getSpeedY() * dt > collisionBlock.getY() - 10 && v.getSpeedY() < 0 &&
+                        v.getX() > collisionBlock.getX() - 10 &&
+                        v.getX() < collisionBlock.getX() + collisionBlock.getWidth()) {
+                    v.setSpeedY(v.getSpeedY() * -collisionRestitution);
+                    v.setY(collisionBlock.getY() - 10);
+
+                    //friction
+                    v.setSpeedX(v.getSpeedX() * frictionRestitution);
+                } else if (v.getY() > collisionBlock.getY() + collisionBlock.getHeight() - 5 &&
+                        v.getY() - v.getSpeedY() * dt < collisionBlock.getY() + collisionBlock.getHeight() &&
+                        v.getSpeedY() > 0 &&
+                        v.getX() > collisionBlock.getX() - 10 &&
+                        v.getX() < collisionBlock.getX() + collisionBlock.getWidth()) {
+                    v.setSpeedY(v.getSpeedY() * -collisionRestitution);
+                    v.setY(collisionBlock.getY() + collisionBlock.getHeight());
+
+                    // friction
+                    v.setSpeedY(v.getSpeedY() * frictionRestitution);
+                }
+                else {
+                    v.setY(v.getY() - v.getSpeedY() * dt);
+                }
+
+
+
+                if (v.getX() < collisionBlock.getX() - 5 &&
+                        v.getX() + v.getSpeedX() * dt > collisionBlock.getX() - 10 && v.getSpeedX() > 0 &&
+                        v.getY() > collisionBlock.getY() - 10 &&
+                        v.getY() < collisionBlock.getY() + collisionBlock.getHeight()) {
+                    v.setSpeedX(v.getSpeedX() * -collisionRestitution);
+                    v.setX(collisionBlock.getX() - 10);
+                } else if (v.getX() > collisionBlock.getX() + collisionBlock.getWidth() - 5 &&
+                        v.getX() + v.getSpeedX() * dt < collisionBlock.getX() + collisionBlock.getWidth() &&
+                        v.getSpeedX() < 0 &&
+                        v.getY() > collisionBlock.getY() - 10 &&
+                        v.getY() < collisionBlock.getY() + collisionBlock.getHeight()) {
+                    v.setSpeedX(v.getSpeedX() * -collisionRestitution);
+                    v.setX(collisionBlock.getX() + collisionBlock.getWidth());
+                }
+                else {
+                    v.setX(v.getX() + v.getSpeedX() * dt);
+                }
+
+
 
                 // applies the force to set the speed plus gravity
                 v.setSpeedY(v.getSpeedY() + v.getForceY());
@@ -224,11 +268,23 @@ public class Block extends JComponent{
                 if (v.getX() > (jPanel.getWidth() - 20.1) || v.getX() < 0.1) {
                     v.setSpeedY(v.getSpeedY() * frictionRestitution);
                 }
+
+                /*// semi-elastic collision with collisionBlock
+                if (v.getX() > collisionBlock.getX() && v.getX() < collisionBlock.getX() + collisionBlock.getWidth() &&
+                        ((int) v.getY() == (int) collisionBlock.getY() || (int) v.getY() == (int) collisionBlock.getY() + collisionBlock.getHeight())) {
+                    v.setSpeedY(v.getSpeedY() * -collisionRestitution);
+                }
+                else if (v.getY() > collisionBlock.getY() && v.getY() < collisionBlock.getY() + collisionBlock.getHeight() &&
+                        ((int) v.getX() == (int) collisionBlock.getX() || (int) v.getX() == (int) collisionBlock.getX() + collisionBlock.getWidth())) {
+                    v.setSpeedX(v.getSpeedX() * -collisionRestitution);
+                }
+
+                System.out.println(v.getY());*/
             }
         }
         g.setColor(backgroundColor);
         g.fillRect(0, 0, jPanel.getWidth(), jPanel.getHeight());
-        g.setColor(new Color(0, 0, 0));
+        g.setColor(vertexColor);
         paint();
     }
 
@@ -339,5 +395,9 @@ public class Block extends JComponent{
 
     public void setDamping(double damping) {
         this.damping = damping;
+    }
+
+    public Graphics2D getG() {
+        return g;
     }
 }
