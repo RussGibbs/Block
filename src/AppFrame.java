@@ -5,8 +5,12 @@ import java.awt.event.ActionListener;
 
 public class AppFrame extends JFrame implements ActionListener {
     Block block;
+
     JTextField gravityTextField;
     JButton gravityButton;
+
+    JTextField dampingTextField;
+    JButton dampingButton;
 
     JPanel simPanel;
 
@@ -24,19 +28,36 @@ public class AppFrame extends JFrame implements ActionListener {
         this.add(jPanel);
 
         JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+        controlPanel.setLayout(new GridLayout(2, 1));
         controlPanel.setBackground(new Color(100, 100, 100));
         jPanel.add(controlPanel);
 
-        gravityTextField = new JTextField();
+        JPanel controlPanelUpper = new JPanel();
+        controlPanelUpper.setLayout(new FlowLayout());
+        controlPanelUpper.setBackground(new Color(100, 100, 100));
+        controlPanel.add(controlPanelUpper);
+
+        JPanel controlPanelLower = new JPanel();
+        controlPanelLower.setLayout(new FlowLayout());
+        controlPanelLower.setBackground(new Color(100, 100, 100));
+        controlPanel.add(controlPanelLower);
+
+        gravityTextField = new JTextField(10);
         gravityTextField.setText("-0.05");
-        controlPanel.add(gravityTextField);
+        //gravityTextField.addActionListener(this);
+        controlPanelUpper.add(gravityTextField);
 
         gravityButton = new JButton("Set");
-        controlPanel.add(gravityButton);
+        controlPanelUpper.add(gravityButton);
         gravityButton.addActionListener(this);
 
+        dampingTextField = new JTextField(10);
+        dampingTextField.setText("0.003");
+        controlPanelLower.add(dampingTextField);
 
+        dampingButton = new JButton("Set");
+        controlPanelLower.add(dampingButton);
+        dampingButton.addActionListener(this);
 
         simPanel = new JPanel();
         simPanel.setVisible(true);
@@ -45,12 +66,12 @@ public class AppFrame extends JFrame implements ActionListener {
         simPanel.setSize(800, 1000);
         jPanel.add(simPanel);
 
+        CollisionBlock collisionBlock = new CollisionBlock(50, 50, new Color(0, 0, 0), 5, 5);
 
-
-        block = new Block(simPanel);
-
-        block.setGravity(Double.parseDouble(gravityTextField.getText()));
-        block.paint();
+        block = new Block(simPanel, collisionBlock, new Color(255, 255, 255), new Color(0, 0, 0), 30,
+                30, 300, 300, 0, 0, 10,
+                0.5, Double.parseDouble(gravityTextField.getText()), Double.parseDouble(dampingTextField.getText()), 0.7, 0.9, 10);
+        Thread.sleep(10);
         revalidate();
         start();
     }
@@ -74,6 +95,10 @@ public class AppFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == gravityButton) {
             block.setGravity(Double.parseDouble(gravityTextField.getText()));
+        }
+
+        if (e.getSource() == dampingButton) {
+            block.setDamping(Double.parseDouble(dampingTextField.getText()));
         }
     }
 }

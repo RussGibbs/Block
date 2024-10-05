@@ -5,7 +5,7 @@ import java.lang.Math;
 
 public class Block extends JComponent{
     private final JPanel jPanel;
-    private final Color color;
+    private final CollisionBlock collisionBlock;
     private final Vertex[][] vertices;
     private final BufferedImage graphics;
     private final Graphics2D g;
@@ -14,7 +14,7 @@ public class Block extends JComponent{
     Color vertexColor;
 
     int defaultSeparation;
-    double equilibriumSeperation;
+    int equilibriumSeperation;
 
     int initialHeight;
     int initialLength;
@@ -32,28 +32,28 @@ public class Block extends JComponent{
     int dimensions;
 
 
-    public Block(JPanel jPanel) {
-        backgroundColor = new Color(255, 255, 255);
-        vertexColor = new Color(0, 0, 0);
+    public Block(JPanel jPanel, CollisionBlock collisionBlock, Color backgroundColor, Color vertexColor, int defaultSeparation,
+                 int equilibriumSeperation, int initialHeight, int initialLength, double initialSpeedX,
+                 double initialSpeedY, double initialRandomness, double springyness, double gravity,
+                 double damping, double collisionRestitution, double frictionRestitution, int dimensions) {
 
-        defaultSeparation = 30;
-        equilibriumSeperation = 30;
-
-        initialHeight = 300;
-        initialLength = 300;
-
-        initialSpeedX = 0;
-        initialSpeedY = 0;
-
-        initialRandomness = 10;
-        springyness = 0.2;
-        //gravity = - 0.5;
-        damping = 0.01;
-        collisionRestitution = 0.9;
-        frictionRestitution = 0.9;
-
-        dimensions = 10;
-
+        this.jPanel = jPanel;
+        this.collisionBlock = collisionBlock;
+        this.backgroundColor = backgroundColor;
+        this.vertexColor = vertexColor;
+        this.defaultSeparation = defaultSeparation;
+        this.equilibriumSeperation = equilibriumSeperation;
+        this.initialHeight = initialHeight;
+        this.initialLength = initialLength;
+        this.initialSpeedX = initialSpeedX;
+        this.initialSpeedY = initialSpeedY;
+        this.initialRandomness = initialRandomness;
+        this.springyness = springyness;
+        this.gravity = gravity;
+        this.damping = damping;
+        this.collisionRestitution = collisionRestitution;
+        this.frictionRestitution = frictionRestitution;
+        this.dimensions = dimensions;
 
         this.vertices = new Vertex[dimensions][dimensions];
         for (int i = 0; i < dimensions; i++) {
@@ -77,8 +77,6 @@ public class Block extends JComponent{
 
 
         recalculateForce();
-        this.color = backgroundColor;
-        this.jPanel = jPanel;
         graphics = new BufferedImage(jPanel.getWidth() - 10, jPanel.getHeight() - 10, BufferedImage.TYPE_INT_RGB);
         g = (Graphics2D) graphics.getGraphics();
         g.setColor(vertexColor);
@@ -337,5 +335,9 @@ public class Block extends JComponent{
 
     public void setGravity(double gravity) {
         this.gravity = gravity;
+    }
+
+    public void setDamping(double damping) {
+        this.damping = damping;
     }
 }
